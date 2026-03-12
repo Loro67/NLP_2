@@ -66,7 +66,7 @@ The analysis generates several key insights:
 *   **Reviews per Insurer:** Identifies the most reviewed companies.
 *   **Reviews per Product:** specific textual analysis per product type.
 
-*(See generated `.png` files in the root directory for examples)*
+*(See generated `.png` files in the `visualizations` directory for examples)*
 
 ## Installation & Usage
 
