@@ -1,0 +1,10 @@
+pandas
+matplotlib
+seaborn
+wordcloud
+nltk
+pyspellchecker
+spacy
+openpyxl
+pyarrow 
+tqdm
