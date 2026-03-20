@@ -8,3 +8,5 @@ spacy
 openpyxl
 pyarrow 
 tqdm
+gensim>=4.4.0
+scikit-learn<=1.8.0
