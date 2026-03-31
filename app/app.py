@@ -90,7 +90,6 @@ with st.sidebar:
         "Summarization":         "summary",
         "Explanation":     "explanation",
         "Information Retrieval": "retrieval",
-        "RAG":                   "rag",
         "Question Answering":    "qa",
     }
 
@@ -143,10 +142,6 @@ elif page_key == "explanation":
 
 elif page_key == "retrieval":
     from pages.retrieval import render
-    render()
-
-elif page_key == "rag":
-    from pages.rag import render
     render()
 
 elif page_key == "qa":

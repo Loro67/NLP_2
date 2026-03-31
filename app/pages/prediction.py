@@ -157,7 +157,7 @@ def render():
         probability_chart(star_labels, probs.tolist(), "Class Probability Distribution")
 
         # Model info
-        with st.expander("ℹModel details"):
+        with st.expander("Model details"):
             st.markdown(f"**Model:** {model_name}")
             st.markdown("**Pipeline:** clean text → tokenize → TF-IDF transform → LR predict")
             st.markdown("**Training task:** 5-class star rating prediction (0-indexed classes 0–4)")

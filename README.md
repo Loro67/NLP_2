@@ -12,10 +12,8 @@ The goal is to extract insights, perform sentiment analysis, predict ratings, an
 ```
 NLP_2/
 ├── data/                       # Contains 35 Excel files (avis_X_traduit.xlsx) with reviews
-├── src/
-│   ├── __init__.py
-│   └── preprocessing.py        # Data loading and preprocessing functions
-├── report_notebook.ipynb       # Main Jupyter Notebook for analysis and modeling
+├── app/                        # Contains the file to run a streamlit app
+├── notebooks/                  # Jupyter Notebooks for analysis and modeling
 ├── README.md                   # Project documentation
 └── *.png                       # Generated plots (Rating distribution, Reviews per insurer, etc.)
 ```
