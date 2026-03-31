@@ -1,77 +1,100 @@
 # NLP Project 2: Insurance Reviews Analysis
 
-**ESILV A4 DIA6 — 2026**             
+**ESILV A4 DIA6 — 2026**  
 **Authors:** Leo WINTER & Alvaro SERERO
 
-## Project Overview
-This project focuses on the Natural Language Processing (NLP) analysis of insurance customer reviews. The dataset consists of reviews (avis) for various insurance products and insurers, originally in French and translated into English.
+## Overview
+This project analyzes French insurance reviews with a complete NLP pipeline:
 
-The goal is to extract insights, perform sentiment analysis, predict ratings, and build a dashboard for visualization.
+- Step 1: data cleaning, spelling correction, EDA, and n-grams
+- Step 2: summarization, translation, QA, and generation
+- Step 3: topic modeling and business themes
+- Step 4: embeddings, TensorBoard projector, semantic search, and theme enrichment
+- Step 5: supervised learning for rating, sentiment, and theme prediction
+- Step 6: Streamlit applications for prediction, insurer analysis, explanation, retrieval, RAG, and QA
 
-## Project Structure
-```
+The final Streamlit app combines local classical models, local extractive QA, embedding-based retrieval, and an optional RAG page.
+
+## Repository Structure
+```text
 NLP_2/
-├── data/                       # Contains 35 Excel files (avis_X_traduit.xlsx) with reviews
-├── app/                        # Contains the file to run a streamlit app
-├── notebooks/                  # Jupyter Notebooks for analysis and modeling
-├── README.md                   # Project documentation
-└── *.png                       # Generated plots (Rating distribution, Reviews per insurer, etc.)
+├── app/
+│   ├── app.py
+│   ├── config.py
+│   ├── pages/
+│   └── utils/
+├── data/
+│   ├── reviews_clean.parquet
+│   ├── reviews_step2.parquet
+│   ├── reviews_step3.parquet
+│   ├── reviews_step4.parquet
+│   ├── reviews_step5.parquet
+│   └── insurer_summaries.csv
+├── model/
+│   ├── word2vec_en.model
+│   ├── word2vec_fr.model
+│   ├── lr_tfidf_en.pkl
+│   ├── lr_rating_en.pkl
+│   ├── tfidf_theme_en.pkl
+│   └── lr_theme_en.pkl
+├── notebooks/
+│   ├── 1_data_cleaning_eda.ipynb
+│   ├── 2_summary_translation_qa_generation.ipynb
+│   ├── 3_topic_modeling.ipynb
+│   ├── 4_embeddings.ipynb
+│   └── 5_supervised_learning.ipynb
+└── visualizations/
 ```
 
-## Dataset
-The dataset is composed of **35 Excel files**, each representing reviews for different insurance segments. These are merged into a single DataFrame for analysis.
+## Main Outputs
+- `data/reviews_step5.parquet`: final enriched dataset used by the app
+- `model/lr_tfidf_en.pkl` + `model/lr_rating_en.pkl`: local rating classifier
+- `model/tfidf_theme_en.pkl` + `model/lr_theme_en.pkl`: local theme classifier
+- `data/tfidf_en.pkl` + `data/tfidf_fr.pkl`: retrieval vectorizers from Step 3
+- `logs/step5/`: TensorBoard projector exports for embedding models
 
-**Key Columns:**
-| Column | Description |
-| :--- | :--- |
-| `note` | Star rating usually 1–5 (Target variable) |
-| `avis` | Original review text in French |
-| `avis_en` | Review translated to English |
-| `avis_cor` | Corrected French text (planned) |
-| `assureur` | Name of the insurance company |
-| `produit` | Type of insurance product (auto, santé, habitation) |
-| `date_publication` | Date when the review was posted |
+## Installation
+Install notebook dependencies:
 
-## Roadmap
-The project follows a structured pipeline:
+```bash
+pip install -r requirements.txt
+```
 
-1.  **Data Cleaning & EDA**
-    *   Load and merge data.
-    *   Visualizations: Rating distribution, reviews per insurer/product.
-    *   Spelling correction and text normalization.
+Install Streamlit app dependencies:
 
-2.  **Summary & Translation**
-    *   Generate summaries for long reviews.
-    *   Ensure high-quality English translations.
+```bash
+pip install -r app/requirements.txt
+```
 
-3.  **Topic Modeling**
-    *   Identify key themes (e.g., *price, customer service, claims*) using LDA or BERTopic.
+## Run Order
+Run the notebooks in this order:
 
-4.  **Embeddings**
-    *   Train Word2Vec or use pre-trained GloVe embeddings.
-    *   Visualize semantic relationships.
+1. `notebooks/1_data_cleaning_eda.ipynb`
+2. `notebooks/2_summary_translation_qa_generation.ipynb`
+3. `notebooks/3_topic_modeling.ipynb`
+4. `notebooks/4_embeddings.ipynb`
+5. `notebooks/step5_supervised_learning.ipynb`
 
-5.  **Supervised Learning (Rating Prediction)**
-    *   Model 1: TF-IDF + Classical ML (Logistic Regression / SVM).
-    *   Model 2: Deep Learning with Embeddings (LSTM / BERT).
+This sequence produces the parquet files, model artifacts, TensorBoard logs, and comparison plots used in the app.
 
-6.  **Deployment**
-    *   Streamlit Dashboard for interactive analysis and prediction.
+## Launch the App
+From the repository root:
 
-## Visualizations
-The analysis generates several key insights:
-*   **Rating Distribution:** Shows the balance of positive vs. negative reviews.
-*   **Reviews per Insurer:** Identifies the most reviewed companies.
-*   **Reviews per Product:** specific textual analysis per product type.
+```bash
+streamlit run app/app.py
+```
 
-*(See generated `.png` files in the `visualizations` directory for examples)*
+The app includes these pages:
 
-## Installation & Usage
+- `Prediction`: local star rating and theme prediction, with optional FR -> EN translation for French input
+- `Insurer Analysis`: insurer summaries, metrics, review search, and theme analysis
+- `Explanation`: SHAP / LR-based word-level explanation for rating predictions
+- `Information Retrieval`: TF-IDF, BM25, and Word2Vec search
+- `RAG`: optional external LLM page over retrieved reviews
+- `Question Answering`: local extractive QA with `deepset/roberta-base-squad2`
 
-1.  **Clone the repository**
-2.  **Install dependencies**:
-    ```bash
-    pip install pandas openpyxl matplotlib seaborn wordcloud textblob deep-translator tqdm nlpclean
-    ```
-3.  **Run the analysis**:
-    Open `report_notebook.ipynb` in Jupyter Notebook.
+## Notes for Submission
+- The `RAG` page is the only page that may require an external API.
+- You can configure the `RAG` page with `OPENAI_API_KEY`, `OPENAI_API_BASE`, and `RAG_LLM_MODEL`.
+- The `Question Answering` page is fully local and does not require API keys.
+- Use [DEMO_CHECKLIST.md](/Users/alvaro/Documents/GitHub/NLP_2/DEMO_CHECKLIST.md) for the 5-minute presentation flow.
